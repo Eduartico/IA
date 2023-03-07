@@ -23,7 +23,7 @@ boardWin = [
 
 boardComplete = [
     ['R', 'B', 'R', 'B', 'R'],
-    ['R', 'B', 'B', 'R', 'K'],
+    ['R', 'B', 'B', 'R', 'G'],
     ['G', 'G', 'G', 'R', 'G'],
     ['G', 'B', 'B', 'B', 'G'],
     ['R', 'G', 'R', 'R', 'R']
@@ -56,7 +56,7 @@ def boardFull(board):
             if piece == ' ':
                 return False
     return True
-
+    
 """
 verify if game ended by checking if all rows and columns are palindromes
 
@@ -68,7 +68,7 @@ True
 def verifyGameEnd(board):
     if (boardFull(board)):
         return True
-
+        
     # see if all rows are palindromes
     cleanRows = eliminateBlankSpaces(board)
     rowsPalindrome = True
@@ -87,7 +87,8 @@ def verifyGameEnd(board):
             break
     
     return rowsPalindrome and columnsPalindrome
-  
+    
+
 
 def getUserInput(maxSize):
     color = input("Choose a color(R-red, G-green, B-blue): ").upper()
@@ -106,3 +107,25 @@ def getUserInput(maxSize):
         column = input(f"Choose a column(number between 0 and {maxSize-1}): ") 
     
     return color, int(row), int(column)
+    
+
+
+def verifyInCanPutPiece(board, row, column):    
+    if board[row][column] == ' ':
+        return True
+    else:
+        return False
+    
+
+def putPieceInBoard(board):
+    maxSize = len(board[0])
+    
+    while True:
+            color, row, column = getUserInput(maxSize)
+            if verifyInCanPutPiece(board, row, column):
+                board[row][column] = color
+                return board
+            else:
+                print("Invalid input, please choose an empty space")
+    
+ 
