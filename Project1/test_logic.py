@@ -70,3 +70,21 @@ def verifyGameEnd(board):
     
     return rowsPalindrome and columnsPalindrome
   
+
+def getUserInput(maxSize):
+    color = input("Choose a color(R-red, G-green, B-blue): ").upper()
+    while color not in {'R', 'G', 'B'}:
+        print("Invalid color. Please choose between R, G or B")
+        color = input("Choose a color(R, G, B): ").upper()
+    
+    row = input(f"Choose a row(number between 0 and {maxSize-1}): ")  
+    while not row.isdigit() or int(row) not in range(maxSize):
+        print(f"Invalid row. Please choose a number between 0 and {maxSize-1}): ")
+        row = input(f"Choose a row(number between 0 and {maxSize-1}): ") 
+        
+    column = input(f"Choose a column(number between 0 and {maxSize-1}): ")
+    while not column.isdigit() or int(column) not in range(maxSize):
+        print(f"Invalid column. Please choose a number between 0 and {maxSize-1}): ")
+        column = input(f"Choose a column(number between 0 and {maxSize-1}): ") 
+    
+    return color, int(row), int(column)
