@@ -5,7 +5,7 @@ Created on Tue Mar  7 01:09:19 2023
 @author: anete
 """
 
-boardNotFinished = [
+boardLose = [
     [' ', ' ', ' ', 'B', 'R'],
     [' ', ' ', ' ', 'R', ' '],
     ['G', 'G', 'G', ' ', 'G'],
@@ -13,12 +13,20 @@ boardNotFinished = [
     [' ', ' ', 'R', ' ', ' ']
 ]
 
-boardFinished = [
+boardWin = [
     [' ', ' ', 'R', 'B', 'R'],
     ['R', 'B', 'B', 'R', ' '],
     ['G', 'G', 'G', ' ', 'G'],
     ['G', 'B', 'B', 'B', 'G'],
     ['R', ' ', 'R', ' ', 'R']
+]
+
+boardComplete = [
+    ['R', 'B', 'R', 'B', 'R'],
+    ['R', 'B', 'B', 'R', 'K'],
+    ['G', 'G', 'G', 'R', 'G'],
+    ['G', 'B', 'B', 'B', 'G'],
+    ['R', 'G', 'R', 'R', 'R']
 ]
 
 def verifyListPalindrome(boardLine):
@@ -42,6 +50,13 @@ def eliminateBlankSpaces(board):
     return  [[elem for elem in row if elem != ' '] for row in board]
 
 
+def boardFull(board):
+    for row in board:
+        for piece in row:
+            if piece == ' ':
+                return False
+    return True
+
 """
 verify if game ended by checking if all rows and columns are palindromes
 
@@ -51,6 +66,9 @@ Test
 True
 """
 def verifyGameEnd(board):
+    if (boardFull(board)):
+        return True
+
     # see if all rows are palindromes
     cleanRows = eliminateBlankSpaces(board)
     rowsPalindrome = True
