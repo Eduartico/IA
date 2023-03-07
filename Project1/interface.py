@@ -2,12 +2,12 @@ import tkinter as tk
 
 # Define the ASCII art title
 title = """
-   _____                                __            
+   _____                                __
   / ___/__  ______ ___  ____ ___  ___  / /________  __
   \__ \/ / / / __ `__ \/ __ `__ \/ _ \/ __/ ___/ / / /
- ___/ / /_/ / / / / / / / / / / /  __/ /_/ /  / /_/ / 
-/____/\__, /_/ /_/ /_/_/ /_/ /_/\___/\__/_/   \__, /  
-     /____/                                  /____/   
+ ___/ / /_/ / / / / / / / / / / /  __/ /_/ /  / /_/ /
+/____/\__, /_/ /_/ /_/_/ /_/ /_/\___/\__/_/   \__, /
+     /____/                                  /____/
 
 """
 
@@ -58,7 +58,7 @@ def start_game():
     try:
         level = int(level_entry.get())
     except ValueError:
-        level = 1 # default level if no input
+        level = 1  # default level if no input
     algorithm = algorithm_var.get()
     draw_board(5, [
         [' ', ' ', ' ', 'B', 'R'],
@@ -75,9 +75,10 @@ start_button.config(command=start_game)
 
 
 def draw_board(X, board):
+    size = len(board)  # size is equal to the number of rows in the board
     cell_size = 50
-    canvas_width = len(board[0]) * cell_size
-    canvas_height = len(board) * cell_size
+    canvas_width = size * cell_size
+    canvas_height = size * cell_size
 
     # Create the main window
     window = tk.Tk()
@@ -88,22 +89,23 @@ def draw_board(X, board):
     canvas.pack()
 
     # Draw the cells
-    for i in range(len(board)):
-        for j in range(len(board[0])):
-            x1 = j * cell_size
-            y1 = i * cell_size
-            x2 = x1 + cell_size
-            y2 = y1 + cell_size
+    for i in range(size):
+        for j in range(size):
+            x1 = j * cell_size + 5
+            y1 = i * cell_size + 5
+            x2 = x1 + cell_size - 10
+            y2 = y1 + cell_size - 10
             color = board[i][j]
+            canvas.create_rectangle(x1, y1, x2, y2, fill="white")
             if color == 'R':
-                fill_color = "red"
+                canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
             elif color == 'G':
-                fill_color = "green"
+                canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
             elif color == 'B':
-                fill_color = "blue"
+                canvas.create_polygon(x1+5, y1+5, x2-5, y1+5,
+                                      (x1+x2)//2, y2-5, fill="blue")
             else:
-                fill_color = "white"
-            canvas.create_rectangle(x1, y1, x2, y2, fill=fill_color)
+                canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
     # Create a label for the user input
     input_label = tk.Label(window, text="Enter color, row, and column:")
@@ -134,31 +136,31 @@ def draw_board(X, board):
         col = int(col_entry.get()) - 1
 
         # Check if the row and column are valid
-        if row < 0 or row >= len(board) or col < 0 or col >= len(board[0]):
+        if row < 0 or row >= size or col < 0 or col >= size:
             message_label.config(text="Invalid row or column")
             return
 
         # Update the board
         board[row][col] = color
+        x1 = col * cell_size + 5
+        y1 = row * cell_size + 5
+        x2 = x1 + cell_size - 10
+        y2 = y1 + cell_size - 10
+        canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill=fill_color)
         if color == 'R':
-            fill_color = "red"
+            canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
         elif color == 'G':
-            fill_color = "green"
+            canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
         elif color == 'B':
-            fill_color = "blue"
+            canvas.create_polygon(x1+5, y1+5, x2-5, y1+5,
+                                  (x1+x2)//2, y2-5, fill="blue")
         else:
-            fill_color = "white"
-        canvas.itemconfig(len(board[0]) * row + col + 1, fill=fill_color)
+            canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
         # Clear the message label
         message_label.config(text="")
 
-    # Bind the button to the submit function
+        # Bind the button to the submit function
     submit_button.config(command=submit)
 
-    # Start the main event loop
-    window.mainloop()
-
-
-# Start the main event loop
-window.mainloop()
+    #
