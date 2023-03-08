@@ -2,13 +2,12 @@ import tkinter as tk
 
 # Define the ASCII art title
 title = """
-   _____                                __
+   _____                                __            
   / ___/__  ______ ___  ____ ___  ___  / /________  __
   \__ \/ / / / __ `__ \/ __ `__ \/ _ \/ __/ ___/ / / /
- ___/ / /_/ / / / / / / / / / / /  __/ /_/ /  / /_/ /
-/____/\__, /_/ /_/ /_/_/ /_/ /_/\___/\__/_/   \__, /
-     /____/                                  /____/
-
+ ___/ / /_/ / / / / / / / / / / /  __/ /_/ /  / /_/ / 
+/____/\__, /_/ /_/ /_/_/ /_/ /_/\___/\__/_/   \__, /  
+     /____/                                  /____/   
 """
 
 # Define the list of available algorithms
@@ -58,7 +57,7 @@ def start_game():
     try:
         level = int(level_entry.get())
     except ValueError:
-        level = 1  # default level if no input
+        level = 1 # default level if no input
     algorithm = algorithm_var.get()
     draw_board(5, [
         [' ', ' ', ' ', 'B', 'R'],
@@ -75,7 +74,7 @@ start_button.config(command=start_game)
 
 
 def draw_board(X, board):
-    size = len(board)  # size is equal to the number of rows in the board
+    size = len(board)
     cell_size = 50
     canvas_width = size * cell_size
     canvas_height = size * cell_size
@@ -102,14 +101,13 @@ def draw_board(X, board):
             elif color == 'G':
                 canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
             elif color == 'B':
-                canvas.create_polygon(x1+5, y1+5, x2-5, y1+5,
-                                      (x1+x2)//2, y2-5, fill="blue")
+                canvas.create_polygon(x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
             else:
                 canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
-    # Create a label for the user input
+        # Create a label for the user input
     input_label = tk.Label(window, text="Enter color, row, and column:")
-    input_label.pack()
+    input_label.grid(row=0, column=0, columnspan=3)
 
     # Create entry widgets for color, row, and column
     color_entry = tk.Entry(window)
@@ -127,7 +125,8 @@ def draw_board(X, board):
 
     # Create a label for messages
     message_label = tk.Label(window, text="")
-    message_label.pack(side="bottom")
+    message_label.grid(row=3, column=0, columnspan=3)
+
 
     # Function to handle button click event
     def submit():
@@ -136,31 +135,34 @@ def draw_board(X, board):
         col = int(col_entry.get()) - 1
 
         # Check if the row and column are valid
-        if row < 0 or row >= size or col < 0 or col >= size:
+        if row < 0 or row >= len(board) or col < 0 or col >= len(board[0]):
             message_label.config(text="Invalid row or column")
             return
 
         # Update the board
         board[row][col] = color
-        x1 = col * cell_size + 5
-        y1 = row * cell_size + 5
-        x2 = x1 + cell_size - 10
-        y2 = y1 + cell_size - 10
-        canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill=fill_color)
         if color == 'R':
-            canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
+            fill_color = "red"
         elif color == 'G':
-            canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
+            fill_color = "green"
         elif color == 'B':
-            canvas.create_polygon(x1+5, y1+5, x2-5, y1+5,
-                                  (x1+x2)//2, y2-5, fill="blue")
+            fill_color = "blue"
         else:
-            canvas.create_rectangle(x1, y1, x2, y2, fill='white')
+            fill_color = "white"
+        canvas.itemconfig(len(board[0]) * row + col + 1, fill=fill_color)
 
         # Clear the message label
         message_label.config(text="")
 
-        # Bind the button to the submit function
+    # Bind the button to the submit function
     submit_button.config(command=submit)
 
-    #
+    # Start the main event loop
+    window.mainloop()
+
+
+# Start the main event loop
+window.mainloop()
+
+
+window.mainloop()
