@@ -109,6 +109,7 @@ def getUserInput(maxSize):
     return color, int(row), int(column)
     
 
+# def mergeBlankAndPalindrome(board):
 
 def verifyInCanPutPiece(board, row, column):    
     if board[row][column] == ' ':
@@ -129,3 +130,9 @@ def putPieceInBoard(board):
                 print("Invalid input, please choose an empty space")
     
  
+def gameLoop(board):
+    newBoard = putPieceInBoard(board)
+    if verifyGameEnd(newBoard):
+        print("Jogo terminado")
+        return True
+    gameLoop(newBoard) 
