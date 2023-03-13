@@ -57,9 +57,9 @@ def start_game():
     try:
         level = int(level_entry.get())
     except ValueError:
-        level = 1 # default level if no input
+        level = 1  # default level if no input
     algorithm = algorithm_var.get()
-    draw_board(5, [
+    draw_board("The game is starting...", [
         [' ', ' ', ' ', 'B', 'R'],
         [' ', ' ', ' ', 'R', ' '],
         ['G', 'G', 'G', ' ', 'G'],
@@ -73,10 +73,10 @@ def start_game():
 start_button.config(command=start_game)
 
 
-def draw_board(X, board):
+def draw_board(state, board):
     size = len(board)
-    cell_size = 50
-    canvas_width = size * cell_size
+    cell_size = 50*2
+    canvas_width = size * cell_size 
     canvas_height = size * cell_size
 
     # Create the main window
@@ -101,68 +101,25 @@ def draw_board(X, board):
             elif color == 'G':
                 canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
             elif color == 'B':
-                canvas.create_polygon(x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
+                canvas.create_polygon(
+                    x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
             else:
                 canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
-        # Create a label for the user input
-    input_label = tk.Label(window, text="Enter color, row, and column:")
-    input_label.grid(row=0, column=0, columnspan=3)
-
-    # Create entry widgets for color, row, and column
-    color_entry = tk.Entry(window)
-    row_entry = tk.Entry(window)
-    col_entry = tk.Entry(window)
-
-    # Grid layout for the entry widgets
-    color_entry.grid(row=1, column=0)
-    row_entry.grid(row=1, column=1)
-    col_entry.grid(row=1, column=2)
-
-    # Create a button for submitting the user input
-    submit_button = tk.Button(window, text="Submit")
-    submit_button.grid(row=2, column=1)
-
     # Create a label for messages
-    message_label = tk.Label(window, text="")
-    message_label.grid(row=3, column=0, columnspan=3)
+    message_label = tk.Label(window, text="", font=("Arial", 20), fg="black")
+    message_label.pack()
 
+    # Configure label's background color to transparent
+    message_label.config(bg="SystemButtonFace")
 
-    # Function to handle button click event
-    def submit():
-        color = color_entry.get()
-        row = int(row_entry.get()) - 1
-        col = int(col_entry.get()) - 1
+    # Clear the message label
+    message_label.config(text=state)
 
-        # Check if the row and column are valid
-        if row < 0 or row >= len(board) or col < 0 or col >= len(board[0]):
-            message_label.config(text="Invalid row or column")
-            return
-
-        # Update the board
-        board[row][col] = color
-        if color == 'R':
-            fill_color = "red"
-        elif color == 'G':
-            fill_color = "green"
-        elif color == 'B':
-            fill_color = "blue"
-        else:
-            fill_color = "white"
-        canvas.itemconfig(len(board[0]) * row + col + 1, fill=fill_color)
-
-        # Clear the message label
-        message_label.config(text="")
-
-    # Bind the button to the submit function
-    submit_button.config(command=submit)
 
     # Start the main event loop
     window.mainloop()
 
 
 # Start the main event loop
-window.mainloop()
-
-
 window.mainloop()
