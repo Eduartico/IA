@@ -1,5 +1,7 @@
 import tkinter as tk
 
+import test_logic as logic
+
 # Define the ASCII art title
 title = """
    _____                                __            
@@ -11,7 +13,8 @@ title = """
 """
 
 # Define the list of available algorithms
-algorithms = ["1 - BFS",
+algorithms = ["0 - Human Player",
+              "1 - BFS",
               "2 - DFS",
               "3 - IDS",
               "4 - UCS",
@@ -50,6 +53,12 @@ start_button.pack()
 # Create a canvas for drawing game elements
 canvas = tk.Canvas(window, width=200, height=200)
 canvas.pack()
+global board
+board = [[' ', ' ', ' ', 'B', 'R'],
+        [' ', 'B', 'B', ' ', 'B'],
+        ['G', 'G', 'G', ' ', 'G'],
+        [' ', 'B', 'B', ' ', 'G'],
+        [' ', ' ', 'R', ' ', ' ']]
 
 
 # Create a function to start the game when the button is clicked
@@ -59,13 +68,7 @@ def start_game():
     except ValueError:
         level = 1  # default level if no input
     algorithm = algorithm_var.get()
-    draw_board("The game is starting...", [
-        [' ', ' ', ' ', 'B', 'R'],
-        [' ', ' ', ' ', 'R', ' '],
-        ['G', 'G', 'G', ' ', 'G'],
-        [' ', 'B', 'B', ' ', 'G'],
-        [' ', ' ', 'R', ' ', ' ']
-    ])
+    draw_board("The game is starting...")
     # Code to start the game using the selected level and algorithm goes here
     pass
 
@@ -73,7 +76,8 @@ def start_game():
 start_button.config(command=start_game)
 
 
-def draw_board(state, board):
+def draw_board(state):
+    global board
     size = len(board)
     cell_size = 50*2
     canvas_width = size * cell_size 
@@ -115,6 +119,39 @@ def draw_board(state, board):
 
     # Clear the message label
     message_label.config(text=state)
+
+    # Create row selector
+    row_label = tk.Label(window, text="Row:")
+    row_label.pack(side="left")
+    row_entry = tk.Entry(window)
+    row_entry.pack(side="left")
+    
+    # Create column selector
+    col_label = tk.Label(window, text="Column:")
+    col_label.pack(side="left")
+    col_entry = tk.Entry(window)
+    col_entry.pack(side="left")
+    
+    # Create color selector
+    color_label = tk.Label(window, text="Color:")
+    color_label.pack(side="left")
+    color_var = tk.StringVar(window)
+    color_var.set("Red")  # Set default color to Red
+    color_options = ["Red", "Green", "Blue"]
+    color_menu = tk.OptionMenu(window, color_var, *color_options)
+    color_menu.pack(side="left")
+
+    # Create submit button
+    def submit():
+        global board
+        row = int(row_entry.get())
+        col = int(col_entry.get())
+        color = color_var.get()
+        board = logic.putPieceInBoard(board, color, row, col)
+    submit_button = tk.Button(window, text="Submit", command=submit)
+    submit_button.pack()
+
+
 
 
     # Start the main event loop

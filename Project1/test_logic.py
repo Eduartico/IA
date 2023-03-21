@@ -118,11 +118,11 @@ def verifyInCanPutPiece(board, row, column):
         return False
     
 
-def putPieceInBoard(board):
+def putPieceInBoard(board, color, row, column):
     maxSize = len(board[0])
     
     while True:
-            color, row, column = getUserInput(maxSize)
+            #color, row, column = getUserInput(maxSize)
             if verifyInCanPutPiece(board, row, column):
                 board[row][column] = color
                 return board
