@@ -79,7 +79,7 @@ start_button.config(command=start_game)
 def draw_board(state):
     global board
     size = len(board)
-    cell_size = 50*2
+    cell_size = 100
     canvas_width = size * cell_size 
     canvas_height = size * cell_size
 
@@ -91,24 +91,29 @@ def draw_board(state):
     canvas = tk.Canvas(window, width=canvas_width, height=canvas_height)
     canvas.pack()
 
-    # Draw the cells
-    for i in range(size):
-        for j in range(size):
-            x1 = j * cell_size + 5
-            y1 = i * cell_size + 5
-            x2 = x1 + cell_size - 10
-            y2 = y1 + cell_size - 10
-            color = board[i][j]
-            canvas.create_rectangle(x1, y1, x2, y2, fill="white")
-            if color == 'R':
-                canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
-            elif color == 'G':
-                canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
-            elif color == 'B':
-                canvas.create_polygon(
-                    x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
-            else:
-                canvas.create_rectangle(x1, y1, x2, y2, fill='white')
+    def draw():
+        canvas.delete("all")
+        # Draw the cells
+        for i in range(size):
+            for j in range(size):
+                x1 = j * cell_size + 5
+                y1 = i * cell_size + 5
+                x2 = x1 + cell_size - 10
+                y2 = y1 + cell_size - 10
+                color = board[i][j]
+                canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+                if color == 'R':
+                    canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
+                elif color == 'G':
+                    canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
+                elif color == 'B':
+                    canvas.create_polygon(
+                        x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
+                else:
+                    canvas.create_rectangle(x1, y1, x2, y2, fill='white')
+
+    # Draw the initial board
+    draw()
 
     # Create a label for messages
     message_label = tk.Label(window, text="", font=("Arial", 20), fg="black")
@@ -136,18 +141,20 @@ def draw_board(state):
     color_label = tk.Label(window, text="Color:")
     color_label.pack(side="left")
     color_var = tk.StringVar(window)
-    color_var.set("Red")  # Set default color to Red
-    color_options = ["Red", "Green", "Blue"]
+    color_var.set("R")  # Set default color to Red
+    color_options = ["R", "G", "B"]
     color_menu = tk.OptionMenu(window, color_var, *color_options)
     color_menu.pack(side="left")
-
+    print("loop")
     # Create submit button
     def submit():
         global board
         row = int(row_entry.get())
         col = int(col_entry.get())
         color = color_var.get()
-        board = logic.putPieceInBoard(board, color, row, col)
+        board = logic.putPieceInBoard(board, color, row-1, col-1)
+        draw()
+        
     submit_button = tk.Button(window, text="Submit", command=submit)
     submit_button.pack()
 

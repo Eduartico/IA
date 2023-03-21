@@ -120,14 +120,12 @@ def verifyInCanPutPiece(board, row, column):
 
 def putPieceInBoard(board, color, row, column):
     maxSize = len(board[0])
-    
-    while True:
-            #color, row, column = getUserInput(maxSize)
-            if verifyInCanPutPiece(board, row, column):
-                board[row][column] = color
-                return board
-            else:
-                print("Invalid input, please choose an empty space")
+    #color, row, column = getUserInput(maxSize)
+    if verifyInCanPutPiece(board, row, column):
+        board[row][column] = color
+        return board
+    else:
+        print("Invalid input, please choose an empty space")
     
  
 def gameLoop(board):
