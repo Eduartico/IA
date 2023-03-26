@@ -119,6 +119,13 @@ def verifyInCanPutPiece(board, row, column):
     
 
 def putPieceInBoard(board, color, row, column):
+    start = (2, 2)
+    end = (4, 4)
+    path = bfs(board, start, end)
+    if path:
+        print("Path Found:", path)
+    else:
+        print("Path Not Found")
     maxSize = len(board[0])
     #color, row, column = getUserInput(maxSize)
     if verifyInCanPutPiece(board, row, column):
@@ -134,3 +141,35 @@ def gameLoop(board):
         print("Jogo terminado")
         return True
     gameLoop(newBoard) 
+
+def bfs(board, start, end):
+    queue = [(start, [start])]
+    visited = set([start])
+    while queue:
+        (current_x, current_y), path = queue.pop(0)
+        if (current_x, current_y) == end:
+            return path
+        # Check for palindrome line
+        if board[current_x] == board[current_x][::-1] and (current_x, 0) not in visited:
+            queue.append(((current_x, 0), path + [(current_x, 0)]))
+            visited.add((current_x, 0))
+        # Check for palindrome column
+        if all(board[i][current_y] == board[~i][current_y] for i in range(len(board))) and (0, current_y) not in visited:
+            queue.append(((0, current_y), path + [(0, current_y)]))
+            visited.add((0, current_y))
+        # Add adjacent nodes
+        for x, y in get_adjacent_nodes(board, current_x, current_y):
+            if (x, y) not in visited:
+                queue.append(((x, y), path + [(x, y)]))
+                visited.add((x, y))
+    return None
+
+def get_adjacent_nodes(board, current_x, current_y):
+    rows, cols = len(board), len(board[0])
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    adj_nodes = []
+    for dx, dy in directions:
+        x, y = current_x + dx, current_y + dy
+        if x >= 0 and x < rows and y >= 0 and y < cols and board[x][y] != " ":
+            adj_nodes.append((x, y))
+    return adj_nodes

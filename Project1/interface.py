@@ -69,8 +69,37 @@ def start_game():
         level = 1  # default level if no input
     algorithm = algorithm_var.get()
     draw_board("The game is starting...")
-    # Code to start the game using the selected level and algorithm goes here
-    pass
+    if algorithm == "0 - Human Player":
+        #human player goes here
+        pass
+    elif algorithm == "1 - BFS":
+        #BFS goes here
+        if logic.path:
+            draw_board(f"Solution found in {len(logic.path)-1} moves")
+        else:
+            draw_board("No solution found")
+    elif algorithm == "2 - DFS":
+        #DFS goes here
+        pass
+    elif algorithm == "3 - IDS":
+        #IDS goes here
+        pass
+    elif algorithm == "4 - UCS":
+        #UCS goes here
+        pass
+    elif algorithm == "5 - Greedy":
+        #Greedy goes here
+        pass
+    elif algorithm == "6 - A*":
+        #A* goes here
+        pass
+    elif algorithm == "7 - Weighted A*":
+        #Weighted A* goes here
+        pass
+    elif algorithm == "8 - Manhattan Distance":
+        #Manhattan Distance goes here
+        pass
+
 
 
 start_button.config(command=start_game)
@@ -157,6 +186,8 @@ def draw_board(state):
         
     submit_button = tk.Button(window, text="Submit", command=submit)
     submit_button.pack()
+    quit_button = tk.Button(window, text="Quit", command=window.destroy)
+    quit_button.pack(side="left")
 
 
 
