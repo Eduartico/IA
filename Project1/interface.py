@@ -181,6 +181,8 @@ def draw_board(state):
         row = int(row_entry.get())
         col = int(col_entry.get())
         color = color_var.get()
+        if(logic.verifyInCanPutPiece(board, row-1,col-1)):
+            state
         board = logic.putPieceInBoard(board, color, row-1, col-1)
         draw()
         
