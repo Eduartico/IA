@@ -1,5 +1,6 @@
 import test_logic as logic
 import heapq
+import copy
 
 
 def heuristic(board, row, col):
@@ -30,25 +31,20 @@ def generate_successors(board):
     successors = []
     for r in range(len(board)):
         for c in range(len(board[0])):
-            # Skip empty cells
-            if board[r][c] == ' ':
+            # Skip non empty cells
+            if not board[r][c] == ' ':
                 continue
             # Check horizontal moves
-            for nc in range(len(board[0])):
-                if nc == c:
-                    continue
-                if board[r][nc] == ' ':
-                    new_board = [row[:] for row in board]
-                    new_board[r][c], new_board[r][nc] = new_board[r][nc], new_board[r][c]
-                    successors.append((new_board, (r, c), (r, nc)))
-            # Check vertical moves
-            for nr in range(len(board)):
-                if nr == r:
-                    continue
-                if board[nr][c] == ' ':
-                    new_board = [row[:] for row in board]
-                    new_board[r][c], new_board[nr][c] = new_board[nr][c], new_board[r][c]
-                    successors.append((new_board, (r, c), (nr, c)))
+            new_board = copy.deepcopy(board)
+            new_board[r][c] = 'R'
+            successors.append(new_board)
+            new_board2 = copy.deepcopy(board)
+            new_board2[r][c] = 'G'
+            successors.append(new_board2)
+            new_board3 = copy.deepcopy(board)
+            new_board3[r][c] = 'B'
+            successors.append(new_board3)
+            print(r, c)
     return successors
 
 # Define the A* search function
@@ -87,4 +83,7 @@ def astar(start_board, goal_board, heuristic):
     # No path found
     return None
 
+print(len(generate_successors(logic.boardWin)))
+for i in generate_successors(logic.boardWin):
+    print(i)
 

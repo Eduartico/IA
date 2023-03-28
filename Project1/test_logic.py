@@ -112,10 +112,13 @@ def getUserInput(maxSize):
 # def mergeBlankAndPalindrome(board):
 
 def verifyInCanPutPiece(board, row, col):    
-    if board[row][col] == ' ' and len(board) >= row and len(board) >= col:
-        return True
-    else:
+    if board[row][col] != ' ':
         return False
+    elif len(board) < row or len(board) < col:
+        return False
+    elif row < 0 or col < 0:
+        return False
+    return True
     
 
 def putPieceInBoard(board, color, row, column):

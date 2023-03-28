@@ -182,8 +182,7 @@ def draw_board(state):
         col = int(col_entry.get())
         color = color_var.get()
         if(logic.verifyInCanPutPiece(board, row-1,col-1)):
-            state
-        board = logic.putPieceInBoard(board, color, row-1, col-1)
+            board = logic.putPieceInBoard(board, color, row-1, col-1)
         draw()
         
     submit_button = tk.Button(window, text="Submit", command=submit)
