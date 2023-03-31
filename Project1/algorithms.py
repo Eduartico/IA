@@ -44,46 +44,68 @@ def generate_successors(board):
             new_board3 = copy.deepcopy(board)
             new_board3[r][c] = 'B'
             successors.append(new_board3)
-            print(r, c)
     return successors
 
-# Define the A* search function
-def astar(start_board, goal_board, heuristic):
-    # Define a helper function to calculate the cost of a path
-    def cost(path):
-        return sum(heuristic(board, *pos) for board, pos in path)
+import heapq
 
-    # Initialize the search
-    start_pos = [(r, c) for r in range(len(start_board)) for c in range(len(start_board[0])) if start_board[r][c] != ' ']
-    start_state = (start_board, tuple(start_pos))
-    goal_pos = [(r, c) for r in range(len(goal_board)) for c in range(len(goal_board[0])) if goal_board[r][c] != ' ']
-    goal_state = (goal_board, tuple(goal_pos))
-    closed = set()
-    fringe = [(cost([start_state]), [start_state])]
+def astar_search(start_state, heuristic_func, successor_func):
+    """Performs A* search to find a solution from start_state."""
+    # Initialize start node
+    start_node = (heuristic_func(start_state), start_state)
+    # Initialize priority queue with start node
+    frontier = [start_node]
+    # Initialize set of visited states
+    visited = set()
+    # Initialize dictionary to keep track of parent nodes
+    parent_dict = {start_state: None}
+    # Initialize dictionary to keep track of g scores
+    g_dict = {start_state: 0}
 
-    # Search until the fringe is empty or a goal state is found
-    while fringe:
-        # Get the next state from the fringe
-        _, path = heapq.heappop(fringe)
-        state = path[-1]
-        if state == goal_state:
+    # Continue searching until the frontier is empty
+    while frontier:
+        # Get the node with the lowest f score from the frontier
+        current_node = heapq.heappop(frontier)
+        current_state = current_node[1]
+
+        # Check if current state is the goal state
+        if logic.verifyGameEnd(current_state):
+            # If it is, return the path to the goal state
+            path = []
+            while current_state:
+                path.append(current_state)
+                current_state = parent_dict[current_state]
+            path.reverse()
             return path
-        if state in closed:
-            continue
-        closed.add(state)
 
-        # Generate successors and add them to the fringe
-        for new_board, pos1, pos2 in generate_successors(state[0]):
-            new_pos = list(state[1])
-            new_pos[new_pos.index(pos1)] = pos2
-            new_state = (new_board, tuple(new_pos))
-            new_path = path + [new_state]
-            heapq.heappush(fringe, (cost(new_path), new_path))
+        # Mark current state as visited
+        visited.add(current_state)
 
-    # No path found
+        # Generate successor states and add them to the frontier
+        for successor_state in successor_func(current_state):
+            # Calculate the g score for the successor state
+            g_score = g_dict[current_state] + 1
+
+            # Check if successor state has been visited or is in the frontier
+            if successor_state in visited:
+                continue
+            for f, state in frontier:
+                if state == successor_state:
+                    if g_score >= g_dict[successor_state]:
+                        continue
+                    else:
+                        frontier.remove((f, state))
+                        heapq.heapify(frontier)
+                    break
+
+            # Update the parent and g score dictionaries
+            parent_dict[successor_state] = current_state
+            g_dict[successor_state] = g_score
+
+            # Calculate the f score for the successor state and add it to the frontier
+            f_score = g_score + heuristic_func(successor_state)
+            heapq.heappush(frontier, (f_score, successor_state))
+
+    # If the frontier is empty and no solution has been found, return None
     return None
 
-print(len(generate_successors(logic.boardWin)))
-for i in generate_successors(logic.boardWin):
-    print(i)
-
+print(astar_search(logic.boardWin, heuristic, generate_successors))
