@@ -21,6 +21,14 @@ boardWin = [
     ['R', ' ', 'R', ' ', 'R']
 ]
 
+boardTest = [
+    [' ', ' ', ' ', 'B', 'R'],
+    ['R', 'B', 'B', 'R', ' '],
+    ['G', 'G', ' ', ' ', 'G'],
+    [' ', 'B', 'B', 'B', 'G'],
+    [' ', ' ', 'R', ' ', 'R']
+]
+
 boardComplete = [
     ['R', 'B', 'R', 'B', 'R'],
     ['R', 'B', 'B', 'R', 'G'],
@@ -66,8 +74,7 @@ Test
 True
 """
 def verifyGameEnd(board):
-    if (boardFull(board)):
-        return True
+
         
     # see if all rows are palindromes
     cleanRows = eliminateBlankSpaces(board)
