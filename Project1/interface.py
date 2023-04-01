@@ -2,6 +2,8 @@ import tkinter as tk
 
 import test_logic as logic
 
+from time import sleep
+
 # Define the ASCII art title
 title = """
    _____                                __            
@@ -19,9 +21,7 @@ algorithms = ["0 - Human Player",
               "3 - IDS",
               "4 - UCS",
               "5 - Greedy",
-              "6 - A*",
-              "7 - Weighted A*",
-              "8 - Manhattan Distance"]
+              "6 - A*"]
 
 
 # Create the main window
@@ -54,11 +54,7 @@ start_button.pack()
 canvas = tk.Canvas(window, width=200, height=200)
 canvas.pack()
 global board
-board = [[' ', ' ', ' ', 'B', 'R'],
-        [' ', 'B', 'B', ' ', 'B'],
-        ['G', 'G', 'G', ' ', 'G'],
-        [' ', 'B', 'B', ' ', 'G'],
-        [' ', ' ', 'R', ' ', ' ']]
+board = logic.boardTest
 
 
 # Create a function to start the game when the button is clicked
@@ -68,16 +64,13 @@ def start_game():
     except ValueError:
         level = 1  # default level if no input
     algorithm = algorithm_var.get()
-    draw_board("The game is starting...")
     if algorithm == "0 - Human Player":
+        draw_board_player("The game is starting...")
         #human player goes here
         pass
     elif algorithm == "1 - BFS":
         #BFS goes here
-        if logic.path:
-            draw_board(f"Solution found in {len(logic.path)-1} moves")
-        else:
-            draw_board("No solution found")
+        draw_board(f"Solution found in X moves")
     elif algorithm == "2 - DFS":
         #DFS goes here
         pass
@@ -93,19 +86,62 @@ def start_game():
     elif algorithm == "6 - A*":
         #A* goes here
         pass
-    elif algorithm == "7 - Weighted A*":
-        #Weighted A* goes here
-        pass
-    elif algorithm == "8 - Manhattan Distance":
-        #Manhattan Distance goes here
-        pass
-
-
 
 start_button.config(command=start_game)
 
 
 def draw_board(state):
+    global board
+    size = len(board)
+    cell_size = 100
+    canvas_width = size * cell_size 
+    canvas_height = size * cell_size
+
+    # Create the main window
+    window = tk.Tk()
+    window.title("Board")
+
+    # Create a canvas for drawing the board
+    canvas = tk.Canvas(window, width=canvas_width, height=canvas_height)
+    canvas.pack()
+
+    def draw():
+        canvas.delete("all")
+        # Draw the cells
+        for i in range(size):
+            for j in range(size):
+                x1 = j * cell_size + 5
+                y1 = i * cell_size + 5
+                x2 = x1 + cell_size - 10
+                y2 = y1 + cell_size - 10
+                color = board[i][j]
+                canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+                if color == 'R':
+                    canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
+                elif color == 'G':
+                    canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
+                elif color == 'B':
+                    canvas.create_polygon(
+                        x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
+                else:
+                    canvas.create_rectangle(x1, y1, x2, y2, fill='white')
+
+    # Draw the initial board
+    draw()
+
+    # Create a label for messages
+    message_label = tk.Label(window, text="", font=("Arial", 20), fg="black")
+    message_label.pack()
+
+    # Configure label's background color to transparent
+    message_label.config(bg="SystemButtonFace")
+
+    # Clear the message label
+    message_label.config(text=state)
+    quit_button = tk.Button(window, text="Quit", command=window.destroy)
+    quit_button.pack(side="left")
+
+def draw_board_player(state):
     global board
     size = len(board)
     cell_size = 100
@@ -184,10 +220,16 @@ def draw_board(state):
         if(logic.verifyInCanPutPiece(board, row-1,col-1)):
             board = logic.putPieceInBoard(board, color, row-1, col-1)
         draw()
+        if (logic.verifyGameEnd(board)):
+            message_label.config(text="You win!")
+            draw()
+        if (logic.verifyGameEnd(board)):
+            sleep(2)
+            quit(window)
         
     submit_button = tk.Button(window, text="Submit", command=submit)
     submit_button.pack()
-    quit_button = tk.Button(window, text="Quit", command=window.destroy)
+    quit_button = tk.Button(window, text="Quit", command=lambda root=window:quit(root)).pack()
     quit_button.pack(side="left")
 
 
@@ -199,3 +241,6 @@ def draw_board(state):
 
 # Start the main event loop
 window.mainloop()
+
+def quit(root):
+    root.destroy()
