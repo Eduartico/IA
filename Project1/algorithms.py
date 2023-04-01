@@ -1,6 +1,34 @@
 import test_logic as logic
 import heapq
 import copy
+from collections import Counter
+
+def compare_halfs(board):
+    score = 0
+    n = len(board)
+
+    for row in range(n):
+        half = n // 2
+        left_half = [board[row][col] for col in range(half) if board[row][col] != ' ']
+        right_half = [board[row][col] for col in range(half, n) if board[row][col] != ' ']
+
+        # Count the number of pieces of each color in the left and right halves of the row
+        left_counts = Counter(left_half) # ex: returns {'R': 2, 'G': 1}
+        right_counts = Counter(right_half)
+
+        # Compare the counts and update the score accordingly
+        for color in ['R', 'G', 'B']:
+            count_diff = abs(left_counts[color] - right_counts[color]) 
+            score += count_diff
+
+    return score
+
+
+def heuristic_compare_halfs(board):
+    score_rows = compare_halfs(board)
+    board_transposed = logic.transposeBoard(board)
+    score_cols = compare_halfs(board_transposed)
+    return score_rows + score_cols
 
 def heuristic(board):
     score = 0
@@ -54,6 +82,7 @@ def a_star(start_state, heuristic, generate_successors):
     while queue:
         queue.sort(key=lambda x: x[0])
         _, current_state = queue.pop(0)
+        print(len(queue))
         if logic.verifyGameEnd(current_state):
             return current_state
         if current_state in visited:
@@ -61,6 +90,8 @@ def a_star(start_state, heuristic, generate_successors):
         visited.append(current_state)
 # Generate successors and add to queue
         successors = generate_successors(current_state)
+        if(len(visited) > 1):
+            print(successors)
         if successors:
             for successor in successors:
                 # Check if successor has already been visited
@@ -78,9 +109,16 @@ def print5(board):
                 dummy = 1
                 print(i)
             else:
-                print(i)
+                print(i,)
                 dummy+=1
 
 #print5(generate_successors(logic.boardTest))
 
-print5(a_star(logic.boardTest, heuristic, generate_successors))
+#print5(a_star(logic.boardTest, heuristic, generate_successors))
+test = generate_successors(logic.boardLose)
+test1 = generate_successors(test[0])
+#print5(test[0])
+#print("----------------------------")
+#print5(test1[0])
+#print(logic.boardWin in test1)
+print(a_star(logic.boardLose, heuristic_compare_halfs, generate_successors))
