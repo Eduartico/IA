@@ -110,4 +110,51 @@ def print5(board):
 
 #print5(generate_successors(logic.boardTest))
 
-print5(a_star(logic.boardTest, heuristic, generate_successors))
+# print5(a_star(logic.boardTest, heuristic, generate_successors))
+
+print5(greedy_search(logic.boardTest, heuristic))
+
+
+def greedy_searchA(initial_board, heuristic):
+    # initial_board (SymmetryPuzzle) - the initial state
+    # heuristic (function) - the heuristic function that takes a board (matrix), and returns an integer saying how many rows and columns are left to complete
+    states = [initial_board]
+    visited = set() 
+
+    #setattr(SymmetryPuzzle, "__lt__", lambda self, other: heuristic(self) < heuristic(other))
+    
+    while heuristic > 0:
+        current_state = heapq.heappop(states)
+
+        if current_state.logic.verifyListPalindrome():
+            return current_state.move_history
+
+        visited.add(current_state)
+
+        for child_state in current_state.children():
+            if child_state not in visited:
+                heapq.heappush(states, child_state)
+        
+    return None
+
+
+
+def greedy_searchB(start_state, heuristic):
+    visited = []
+    queue = [(heuristic(start_state), start_state)]
+    while queue:
+        queue.sort(key=lambda x: x[0])
+        _, current_state = queue.pop(0)
+        if logic.verifyGameEnd(current_state):
+            return current_state
+        if current_state in visited:
+            continue
+        visited.append(current_state)
+        # Generate successors and add to queue
+        successors = generate_successors(current_state)
+        if successors:
+            successors.sort(key=lambda x: heuristic(x))
+            best_successor = successors[0]
+            queue.append((heuristic(best_successor), best_successor))
+    return "No results found :("
+
