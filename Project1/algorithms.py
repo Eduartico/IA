@@ -80,9 +80,9 @@ def a_star(start_state, heuristic, generate_successors):
     visited = []
     queue = [(heuristic(start_state), start_state)]
     while queue:
+        successors = []
         queue.sort(key=lambda x: x[0])
         _, current_state = queue.pop(0)
-        print(len(queue))
         if logic.verifyGameEnd(current_state):
             return current_state
         if current_state in visited:
@@ -90,16 +90,12 @@ def a_star(start_state, heuristic, generate_successors):
         visited.append(current_state)
 # Generate successors and add to queue
         successors = generate_successors(current_state)
-        if(len(visited) > 1):
-            print(successors)
         if successors:
             for successor in successors:
                 # Check if successor has already been visited
                 if successor not in visited:
                     queue.append((heuristic(successor), successor))
-                    # Add successor to visited set
-                    visited.append(successor)
-    return None
+    return "No results found :("
 
 def print5(board):
     dummy = 1
@@ -114,11 +110,4 @@ def print5(board):
 
 #print5(generate_successors(logic.boardTest))
 
-#print5(a_star(logic.boardTest, heuristic, generate_successors))
-test = generate_successors(logic.boardLose)
-test1 = generate_successors(test[0])
-#print5(test[0])
-#print("----------------------------")
-#print5(test1[0])
-#print(logic.boardWin in test1)
-print(a_star(logic.boardLose, heuristic_compare_halfs, generate_successors))
+print5(a_star(logic.boardTest, heuristic, generate_successors))
