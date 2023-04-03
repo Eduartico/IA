@@ -1,8 +1,7 @@
 import tkinter as tk
-
 import test_logic as logic
-
 from time import sleep
+import algorithms as alg
 
 # Define the ASCII art title
 title = """
@@ -63,34 +62,35 @@ def start_game():
         level = int(level_entry.get())
     except ValueError:
         level = 1  # default level if no input
-    algorithm = algorithm_var.get()
-    if algorithm == "0 - Human Player":
-        draw_board_player("The game is starting...")
-        #human player goes here
+    option = algorithm_var.get()
+    if option == "0 - Human Player":
+        draw_board_player()
         pass
-    elif algorithm == "1 - BFS":
+    elif option == "1 - BFS":
+        algorithm = algorithms.bfs
         #BFS goes here
-        draw_board(f"Solution found in X moves")
-    elif algorithm == "2 - DFS":
+        draw_board()
+    elif option == "2 - DFS":
         #DFS goes here
         pass
-    elif algorithm == "3 - IDS":
+    elif option == "3 - IDS":
         #IDS goes here
         pass
-    elif algorithm == "4 - UCS":
+    elif option == "4 - UCS":
         #UCS goes here
         pass
-    elif algorithm == "5 - Greedy":
+    elif option == "5 - Greedy":
         #Greedy goes here
         pass
-    elif algorithm == "6 - A*":
-        #A* goes here
+    elif option == "6 - A*":
+        algorithm = alg.a_star
         pass
+    draw_board(algorithm)
 
 start_button.config(command=start_game)
 
 
-def draw_board(state):
+def draw_board(algorithm):
     global board
     size = len(board)
     cell_size = 100
@@ -104,7 +104,7 @@ def draw_board(state):
     # Create a canvas for drawing the board
     canvas = tk.Canvas(window, width=canvas_width, height=canvas_height)
     canvas.pack()
-
+    #message_label.config(text="The game is starting")
     def draw():
         canvas.delete("all")
         # Draw the cells
@@ -137,11 +137,12 @@ def draw_board(state):
     message_label.config(bg="SystemButtonFace")
 
     # Clear the message label
-    message_label.config(text=state)
+    board, visited = algorithm(board)
+    message_label.config(text={f"Solution found after {visited} states"})
     quit_button = tk.Button(window, text="Quit", command=window.destroy)
     quit_button.pack(side="left")
 
-def draw_board_player(state):
+def draw_board_player():
     global board
     size = len(board)
     cell_size = 100
@@ -188,7 +189,7 @@ def draw_board_player(state):
     message_label.config(bg="SystemButtonFace")
 
     # Clear the message label
-    message_label.config(text=state)
+    message_label.config(text="CHANGE ME")
 
     # Create row selector
     row_label = tk.Label(window, text="Row:")

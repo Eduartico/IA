@@ -76,15 +76,15 @@ def generate_successors(board):
 
 
 
-def a_star(start_state, heuristic, generate_successors):
+def a_star(start_state):
     visited = []
-    queue = [(heuristic(start_state), start_state)]
+    queue = [(heuristic_compare_halfs(start_state), start_state)]
     while queue:
         successors = []
         queue.sort(key=lambda x: x[0])
         _, current_state = queue.pop(0)
         if logic.verifyGameEnd(current_state):
-            return current_state
+            return current_state, len(visited)
         if current_state in visited:
             continue
         visited.append(current_state)
@@ -94,7 +94,7 @@ def a_star(start_state, heuristic, generate_successors):
             for successor in successors:
                 # Check if successor has already been visited
                 if successor not in visited:
-                    queue.append((heuristic(successor), successor))
+                    queue.append((heuristic_compare_halfs(successor), successor))
     return "No results found :("
 
 def print5(board):
@@ -107,14 +107,7 @@ def print5(board):
             else:
                 print(i,)
                 dummy+=1
-
-#print5(generate_successors(logic.boardTest))
-
-# print5(a_star(logic.boardTest, heuristic, generate_successors))
-
-print5(greedy_search(logic.boardTest, heuristic))
-
-
+'''
 def greedy_searchA(initial_board, heuristic):
     # initial_board (SymmetryPuzzle) - the initial state
     # heuristic (function) - the heuristic function that takes a board (matrix), and returns an integer saying how many rows and columns are left to complete
@@ -158,3 +151,10 @@ def greedy_searchB(start_state, heuristic):
             queue.append((heuristic(best_successor), best_successor))
     return "No results found :("
 
+#print5(generate_successors(logic.boardTest))
+
+# print5(a_star(logic.boardTest, heuristic, generate_successors))
+
+print5(greedy_searchA(logic.boardTest, heuristic))
+
+'''
