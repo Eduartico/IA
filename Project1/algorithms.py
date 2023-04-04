@@ -10,7 +10,7 @@ def compare_halfs(board):
     n = len(board)
 
     for row in range(n):
-        half = n // 2
+        half = n // 2 
         left_half = [board[row][col] for col in range(half) if board[row][col] != ' ']
         right_half = [board[row][col] for col in range(half, n) if board[row][col] != ' ']
 
@@ -80,14 +80,13 @@ def generate_successors(board):
 
 def a_star(start_state):
     visited = []
-    queue = [(heuristic(start_state), start_state)]
+    queue = [(heuristic_compare_halfs(start_state), start_state)]
     
     # for statistics 
     start_time: int = perf_counter_ns()
     # ------
 
     while queue:
-        
         
         successors = []
         queue.sort(key=lambda x: x[0])
@@ -110,7 +109,7 @@ def a_star(start_state):
             for successor in successors:
                 # Check if successor has already been visited
                 if successor not in visited:
-                    queue.append((heuristic(successor), successor))
+                    queue.append((heuristic_compare_halfs(successor), successor))
     
     return "No results found :("
 
@@ -126,14 +125,14 @@ def print5(board):
                 dummy+=1
 
 print( "---- A* ---")
-print(a_star(logic.board4x4))
+print(a_star(logic.boardTest6x6))
 print()
 
 
 
-def greedy_search(start_state, heuristic):
+def greedy_search(start_state):
     visited = [] # closed
-    queue = [(heuristic(start_state), start_state)] # open
+    queue = [(heuristic_compare_halfs(start_state), start_state)] # open
     
     # for statistics 
     start_time: int = perf_counter_ns()
@@ -156,15 +155,15 @@ def greedy_search(start_state, heuristic):
         
         successors = generate_successors(current_state)
         if successors:
-            successors.sort(key=lambda x: heuristic(x))
+            successors.sort(key=lambda x: heuristic_compare_halfs(x))
             for successor in successors:
                 if successor not in visited:
-                    queue.append((heuristic(successor), successor))
+                    queue.append((heuristic_compare_halfs(successor), successor))
         
     return "No results found :("
 
 print( "---- Greedy ---")
-print(greedy_search(logic.board4x4, heuristic))
+print(greedy_search(logic.boardTest6x6))
 print()
 
 def bfs(start_state):
@@ -196,5 +195,5 @@ def bfs(start_state):
     return "No results found :(" 
 
 print( "---- BFS ---")
-print(bfs(logic.board4x4))
+print(bfs(logic.boardTest6x6))
 print()
