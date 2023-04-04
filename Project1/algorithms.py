@@ -134,3 +134,20 @@ def greedy_search(start_state, heuristic):
 
 
 # print5(greedy_search(logic.boardTest, heuristic))
+
+def bfs(start_state):
+    visited = []
+    queue = [start_state]
+    while queue:
+        current_state = queue.pop(0)
+        if logic.verifyGameEnd(current_state):
+            return current_state, len(visited)
+        if current_state in visited:
+            continue
+        visited.append(current_state)
+        successors = generate_successors(current_state)
+        if successors:
+            for successor in successors:
+                if successor not in visited:
+                    queue.append(successor)
+    return "No results found :(" 
