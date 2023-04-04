@@ -19,9 +19,8 @@ algorithms = ["0 - Human Player",
               "1 - BFS",
               "2 - DFS",
               "3 - IDS",
-              "4 - UCS",
-              "5 - Greedy",
-              "6 - A*"]
+              "4 - Greedy",
+              "5 - A*"]
 
 
 # Create the main window
@@ -54,72 +53,46 @@ start_button.pack()
 canvas = tk.Canvas(window, width=200, height=200)
 canvas.pack()
 global board
+board = logic.boardTest
+
 
 # Create a function to start the game when the button is clicked
 def start_game():
+    global board
     try:
         level = int(level_entry.get())
     except ValueError:
-        level = 1  # default level if no input
+        level = 1  # default level if no input,
+    if(level > len(levels.levels) or level <=0):
+        level = 1
+    initial_board = levels.levels[level-1]
+    board = initial_board
     option = algorithm_var.get()
     if option == "0 - Human Player":
         draw_board_player()
         pass
     elif option == "1 - BFS":
         algorithm = alg.bfs
-        #BFS goes here
-        draw_board()
     elif option == "2 - DFS":
-        #DFS goes here
+        algorithm = alg.dfs
         pass
     elif option == "3 - IDS":
-        #IDS goes here
+        algorithm = alg.ids
         pass
-    elif option == "4 - UCS":
-        #UCS goes here
+    elif option == "4 - Greedy":
+        algorithm = alg.greedy_search
         pass
-    elif option == "5 - Greedy":
-        #Greedy goes here
-        pass
-    elif option == "6 - A*":
+    elif option == "5 - A*":
         algorithm = alg.a_star
         pass
-    if(level > len(levels.levels) or level <=0):
-        level = 1
-    initial_board = levels.levels[level-1]
-    board = initial_board
-    draw_board(initial_board, algorithm)
+    draw_board(algorithm)
 
 start_button.config(command=start_game)
 
-def draw(board):
-    size = len(board)
-    cell_size = 100
-    canvas_width = size * cell_size 
-    canvas_height = size * cell_size
-    canvas.delete("all")
-    # Draw the cells
-    for i in range(size):
-        for j in range(size):
-            x1 = j * cell_size + 5
-            y1 = i * cell_size + 5
-            x2 = x1 + cell_size - 10
-            y2 = y1 + cell_size - 10
-            color = board[i][j]
-            canvas.create_rectangle(x1, y1, x2, y2, fill="white")
-            if color == 'R':
-                canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
-            elif color == 'G':
-                canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
-            elif color == 'B':
-                canvas.create_polygon(
-                    x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
-            else:
-                canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
-def draw_board(initial_board, algorithm):
+def draw_board(algorithm):
     global board
-    size = len(initial_board)
+    size = len(board)
     cell_size = 100
     canvas_width = size * cell_size 
     canvas_height = size * cell_size
@@ -132,9 +105,29 @@ def draw_board(initial_board, algorithm):
     canvas = tk.Canvas(window, width=canvas_width, height=canvas_height)
     canvas.pack()
     #message_label.config(text="The game is starting")
+    def draw():
+        canvas.delete("all")
+        # Draw the cells
+        for i in range(size):
+            for j in range(size):
+                x1 = j * cell_size + 5
+                y1 = i * cell_size + 5
+                x2 = x1 + cell_size - 10
+                y2 = y1 + cell_size - 10
+                color = board[i][j]
+                canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+                if color == 'R':
+                    canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
+                elif color == 'G':
+                    canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
+                elif color == 'B':
+                    canvas.create_polygon(
+                        x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
+                else:
+                    canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
     # Draw the initial board
-    draw(board)
+    draw()
 
     # Create a label for messages
     message_label = tk.Label(window, text="", font=("Arial", 20), fg="black")
@@ -144,8 +137,8 @@ def draw_board(initial_board, algorithm):
     message_label.config(bg="SystemButtonFace")
 
     # Clear the message label
-    board, visited = algorithm(initial_board)
-    message_label.config(text={f"Solution found after {visited} states"})
+    board, visited = algorithm(board)
+    message_label.config(text=f"Solution found after {visited} states")
     quit_button = tk.Button(window, text="Quit", command=window.destroy)
     quit_button.pack(side="left")
 
@@ -164,8 +157,29 @@ def draw_board_player():
     canvas = tk.Canvas(window, width=canvas_width, height=canvas_height)
     canvas.pack()
 
+    def draw():
+        canvas.delete("all")
+        # Draw the cells
+        for i in range(size):
+            for j in range(size):
+                x1 = j * cell_size + 5
+                y1 = i * cell_size + 5
+                x2 = x1 + cell_size - 10
+                y2 = y1 + cell_size - 10
+                color = board[i][j]
+                canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+                if color == 'R':
+                    canvas.create_rectangle(x1+5, y1+5, x2-5, y2-5, fill="red")
+                elif color == 'G':
+                    canvas.create_oval(x1+5, y1+5, x2-5, y2-5, fill="green")
+                elif color == 'B':
+                    canvas.create_polygon(
+                        x1+5, y2-5, x2-5, y2-5, (x1+x2)//2, y1+5, fill="blue")
+                else:
+                    canvas.create_rectangle(x1, y1, x2, y2, fill='white')
+
     # Draw the initial board
-    draw(board)
+    draw()
 
     # Create a label for messages
     message_label = tk.Label(window, text="", font=("Arial", 20), fg="black")
@@ -175,7 +189,7 @@ def draw_board_player():
     message_label.config(bg="SystemButtonFace")
 
     # Clear the message label
-    message_label.config(text="someone change this text pls")
+    message_label.config(text="")
 
     # Create row selector
     row_label = tk.Label(window, text="Row:")
@@ -212,7 +226,6 @@ def draw_board_player():
             draw()
         if (logic.verifyGameEnd(board)):
             sleep(2)
-            quit(window)
         
     submit_button = tk.Button(window, text="Submit", command=submit)
     submit_button.pack()
