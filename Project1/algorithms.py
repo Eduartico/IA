@@ -2,6 +2,8 @@ import test_logic as logic
 import heapq
 import copy
 from collections import Counter
+from time import perf_counter_ns
+
 
 def compare_halfs(board):
     score = 0
@@ -79,12 +81,29 @@ def generate_successors(board):
 def a_star(start_state):
     visited = []
     queue = [(heuristic_compare_halfs(start_state), start_state)]
+    
+    # for statistics 
+    start_time: int = perf_counter_ns()
+    nodes_explored = 0
+    # ------
+
     while queue:
+        
+        nodes_explored += 1
+        
         successors = []
         queue.sort(key=lambda x: x[0])
         _, current_state = queue.pop(0)
         if logic.verifyGameEnd(current_state):
+            # for statistics
+            end_time: int = perf_counter_ns()
+            time: float = (end_time - start_time) / 1000000
+            
+            print(f"time taken: {time}")
+            print(f"nodes explored: {nodes_explored}")
+            # -------
             return current_state, len(visited)
+        
         if current_state in visited:
             continue
         visited.append(current_state)
@@ -95,6 +114,7 @@ def a_star(start_state):
                 # Check if successor has already been visited
                 if successor not in visited:
                     queue.append((heuristic_compare_halfs(successor), successor))
+    
     return "No results found :("
 
 def print5(board):
@@ -108,15 +128,32 @@ def print5(board):
                 print(i,)
                 dummy+=1
 
+print( "---- A* ---")
+print(a_star(logic.board3x3))
+print()
+
 
 
 def greedy_search(start_state, heuristic):
     visited = [] # closed
     queue = [(heuristic(start_state), start_state)] # open
     
+    # for statistics 
+    start_time: int = perf_counter_ns()
+    nodes_explored = 0
+    # ------
+    
     while queue:
+        nodes_explored += 1
         h, current_state = queue.pop(0)
         if logic.verifyGameEnd(current_state):
+            # for statistics
+            end_time: int = perf_counter_ns()
+            time: float = (end_time - start_time) / 1000000
+            
+            print(f"time taken: {time}")
+            print(f"nodes explored: {nodes_explored}")
+            # -------
             return current_state
         
         if current_state in visited:
@@ -132,15 +169,30 @@ def greedy_search(start_state, heuristic):
         
     return "No results found :("
 
-
-# print5(greedy_search(logic.boardTest, heuristic))
+print( "---- Greedy ---")
+print(greedy_search(logic.board3x3, heuristic_compare_halfs))
+print()
 
 def bfs(start_state):
     visited = []
     queue = [start_state]
+    
+    # for statistics 
+    start_time: int = perf_counter_ns()
+    nodes_explored = 0
+    # ------
+    
     while queue:
+        nodes_explored += 1
         current_state = queue.pop(0)
         if logic.verifyGameEnd(current_state):
+            # for statistics
+            end_time: int = perf_counter_ns()
+            time: float = (end_time - start_time) / 1000000
+            
+            print(f"time taken: {time}")
+            print(f"nodes explored: {nodes_explored}")
+            # -------
             return current_state, len(visited)
         if current_state in visited:
             continue
@@ -151,3 +203,7 @@ def bfs(start_state):
                 if successor not in visited:
                     queue.append(successor)
     return "No results found :(" 
+
+print( "---- BFS ---")
+print(bfs(logic.board3x3))
+print()
