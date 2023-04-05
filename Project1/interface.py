@@ -73,6 +73,7 @@ def start_game():
         pass
     elif option == "1 - BFS":
         algorithm = alg.bfs
+        pass
     elif option == "2 - DFS":
         algorithm = alg.dfs
         pass

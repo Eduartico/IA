@@ -125,7 +125,7 @@ def print5(board):
                 dummy+=1
 
 print( "---- A* ---")
-print(a_star(logic.board3x3))
+print(a_star(logic.board5x5))
 print()
 
 
@@ -163,7 +163,7 @@ def greedy_search(start_state):
     return "No results found :("
 
 print( "---- Greedy ---")
-print(greedy_search(logic.board3x3))
+print(greedy_search(logic.board5x5))
 print()
 
 def bfs(start_state):
@@ -195,5 +195,31 @@ def bfs(start_state):
     return "No results found :(" 
 
 print( "---- BFS ---")
-print(bfs(logic.board3x3))
+print(bfs(logic.board5x5))
+print()
+
+def dfs(start_state):
+    visited = []
+    stack = [(start_state, 0)]
+    start_time: int = perf_counter_ns()
+    while stack:
+        current_state, cost = stack.pop()
+        if logic.verifyGameEnd(current_state):
+            end_time: int = perf_counter_ns()
+            time: float = (end_time - start_time) / 1000000
+            
+            print(f"time taken: {time}")
+            return current_state, len(visited)
+        if current_state in visited:
+            continue
+        visited.append(current_state)
+        successors = generate_successors(current_state)
+        if successors:
+            for successor in successors[::-1]:
+                if successor not in visited:
+                    stack.append((successor, cost+1))
+    return "No results found :("
+
+print( "---- DFS ---")
+print(dfs(logic.board5x5))
 print()
