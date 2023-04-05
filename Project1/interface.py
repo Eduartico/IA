@@ -18,9 +18,8 @@ title = """
 algorithms = ["0 - Human Player",
               "1 - BFS",
               "2 - DFS",
-              "3 - IDS",
-              "4 - Greedy",
-              "5 - A*"]
+              "3 - Greedy",
+              "4 - A*"]
 
 
 # Create the main window
@@ -77,13 +76,10 @@ def start_game():
     elif option == "2 - DFS":
         algorithm = alg.dfs
         pass
-    elif option == "3 - IDS":
-        algorithm = alg.ids
-        pass
-    elif option == "4 - Greedy":
+    elif option == "3 - Greedy":
         algorithm = alg.greedy_search
         pass
-    elif option == "5 - A*":
+    elif option == "4 - A*":
         algorithm = alg.a_star
         pass
     draw_board(algorithm)
@@ -136,7 +132,7 @@ def draw_board(algorithm):
 
     # Configure label's background color to transparent
     message_label.config(bg="SystemButtonFace")
-
+    
     # Clear the message label
     board, visited = algorithm(board)
     message_label.config(text=f"Solution found after {visited} states")

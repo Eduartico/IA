@@ -8,11 +8,11 @@ from time import perf_counter_ns
 def compare_halfs(board):
     score = 0
     n = len(board)
-
+    print(n)
     for row in range(n):
         half = n // 2 
         left_half = [board[row][col] for col in range(half) if board[row][col] != ' ']
-        right_half = [board[row][col] for col in range(half, n) if board[row][col] != ' ']
+        right_half = [board[row][col] for col in range(half, n) if board[row][col] != ' ']  #If you want to test the 4x4 board, you need to put n-1 in this line.
 
         # Count the number of pieces of each color in the left and right halves of the row
         left_counts = Counter(left_half) # ex: returns {'R': 2, 'G': 1}
@@ -124,10 +124,11 @@ def print5(board):
                 print(i,)
                 dummy+=1
 
+'''
 print( "---- A* ---")
-print(a_star(logic.board5x5))
+print(a_star(logic.board3x3))     #You can uncomment this section to test the time and number of generated states.
 print()
-
+'''
 
 
 def greedy_search(start_state):
@@ -162,9 +163,11 @@ def greedy_search(start_state):
         
     return "No results found :("
 
+'''
 print( "---- Greedy ---")
-print(greedy_search(logic.board5x5))
+print(greedy_search(logic.board3x3))    #You can uncomment this section to test the time and number of generated states.
 print()
+'''
 
 def bfs(start_state):
     visited = []
@@ -194,9 +197,11 @@ def bfs(start_state):
                     queue.append(successor)
     return "No results found :(" 
 
+'''
 print( "---- BFS ---")
-print(bfs(logic.board5x5))
+print(bfs(logic.board3x3))  #You can uncomment this section to test the time and number of generated states.
 print()
+'''
 
 def dfs(start_state):
     visited = []
@@ -220,6 +225,8 @@ def dfs(start_state):
                     stack.append((successor, cost+1))
     return "No results found :("
 
+'''
 print( "---- DFS ---")
-print(dfs(logic.board5x5))
-print()
+print(dfs(logic.board3x3))  #You can uncomment this section to test the time and number of generated states.
+print()  
+'''
