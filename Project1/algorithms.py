@@ -125,7 +125,7 @@ def print5(board):
                 dummy+=1
 
 print( "---- A* ---")
-print(a_star(logic.boardTest6x6))
+print(a_star(logic.board3x3))
 print()
 
 
@@ -163,7 +163,7 @@ def greedy_search(start_state):
     return "No results found :("
 
 print( "---- Greedy ---")
-print(greedy_search(logic.boardTest6x6))
+print(greedy_search(logic.board3x3))
 print()
 
 def bfs(start_state):
@@ -195,5 +195,5 @@ def bfs(start_state):
     return "No results found :(" 
 
 print( "---- BFS ---")
-print(bfs(logic.boardTest6x6))
+print(bfs(logic.board3x3))
 print()
