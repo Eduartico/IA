@@ -26,7 +26,7 @@ def load_model(fname):
     model = joblib.load(os.path.join(dirname, fname))
     return model
 
-def train_model(data, model_obj, fname, test_size=0.1):
+def train_model(data, model_obj, fname, test_size=0.2):
     X = data.values
     y = np.arange(X.shape[0])  # Create an array of indices
     Le = LabelEncoder()

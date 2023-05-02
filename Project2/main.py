@@ -23,7 +23,8 @@ model_map = {
     ModelType.MLPR: (MLPRegressor(), 'MLPRegressor.sav'),
 }
 
-data = pd.read_csv("airlines_delay.csv")
+#data = pd.read_csv("airlines_delay.csv")
+data = pd.read_csv("iris-data.csv")
 
 # train and test svm model
 data_manip.train_model(data, model_map[ModelType.svm][0], model_map[ModelType.svm][1])
