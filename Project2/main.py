@@ -4,12 +4,14 @@ import warnings
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.neural_network import MLPRegressor
-from sklearn.svm import SVC
+from sklearn.svm import SVR
 from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestRegressor
 from enum import Enum
 class ModelType(Enum):
     svm = 1
-    logreg = 2
+    randforest = 2
     graboo = 3
     MLPR = 4
 
@@ -17,8 +19,8 @@ class ModelType(Enum):
 warnings.filterwarnings("ignore", category=UserWarning)
 
 model_map = {
-    ModelType.svm: (SVC(), 'svm.sav'),
-    ModelType.logreg: (LogisticRegression(), 'logreg.sav'),
+    ModelType.svm: (SVR(), 'svm.sav'),
+    ModelType.randforest: (RandomForestRegressor(), 'RandForest.sav'),
     ModelType.graboo: (GradientBoostingRegressor(), 'gradientbooster.sav'),
     ModelType.MLPR: (MLPRegressor(), 'MLPRegressor.sav'),
 }
@@ -31,8 +33,8 @@ data_manip.train_model(data, model_map[ModelType.svm][0], model_map[ModelType.sv
 model_test.test_model(model_map[ModelType.svm][1])
 
 # train and test logical regression model
-data_manip.train_model(data, model_map[ModelType.logreg][0], model_map[ModelType.logreg][1])
-model_test.test_model(model_map[ModelType.logreg][1])
+data_manip.train_model(data, model_map[ModelType.randforest][0], model_map[ModelType.randforest][1])
+model_test.test_model(model_map[ModelType.randforest][1])
 
 # train and test gradient booster regressor model
 data_manip.train_model(data, model_map[ModelType.graboo][0], model_map[ModelType.graboo][1])
