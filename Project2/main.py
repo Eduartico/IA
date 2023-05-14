@@ -6,9 +6,9 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestRegressor
 from enum import Enum
+import os
 class ModelType(Enum):
     svm = 1
     randforest = 2
@@ -25,8 +25,11 @@ model_map = {
     ModelType.MLPR: (MLPRegressor(), 'MLPRegressor.sav'),
 }
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+filename = "airlines_delay.csv"
+data = pd.read_csv(os.path.join(current_dir, filename))
 #data = pd.read_csv("airlines_delay.csv")
-data = pd.read_csv("iris-data.csv")
+#data = pd.read_csv("iris-data.csv")
 
 # train and test svm model
 data_manip.train_model(data, model_map[ModelType.svm][0], model_map[ModelType.svm][1])
@@ -43,3 +46,5 @@ model_test.test_model(model_map[ModelType.graboo][1])
 # train and test MLPRegressor model
 data_manip.train_model(data, model_map[ModelType.MLPR][0], model_map[ModelType.MLPR][1])
 model_test.test_model(model_map[ModelType.MLPR][1])
+
+
