@@ -3,8 +3,8 @@
 * Tools: Python
 * Institution: FEUP
 * Course: IA (Artificial Intelligence)
-* Project 1 grade: ?/20.0
-* Project 2 grade: ?/20.0
+* Project 1 grade: 13.5/20.0
+* Project 2 grade: 17.0/20.0
 * Group members: 
   * Anete Medina Pereira (up202008856@up.pt)
   * Anthony Kevin Delgado Silva (up202211080@up.pt)
