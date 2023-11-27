@@ -62,7 +62,7 @@ def generate_successors(board):
     for r in range(len(board)):
         for c in range(len(board[0])):
             # Skip non empty cells
-            if not board[r][c] == ' ':
+            if board[r][c] != ' ':
                 continue
             # Check horizontal moves
             new_board = copy.deepcopy(board)
@@ -81,7 +81,7 @@ def generate_successors(board):
 def a_star(start_state):
     visited = []
     queue = [(heuristic_compare_halfs(start_state), start_state)]
-    
+
     # for statistics 
     start_time: int = perf_counter_ns()
     # ------
@@ -95,22 +95,20 @@ def a_star(start_state):
             # for statistics
             end_time: int = perf_counter_ns()
             time: float = (end_time - start_time) / 1000000
-            
+
             print(f"time taken: {time}")
             # -------
             return current_state, len(visited)
-        
+
         if current_state in visited:
             continue
         visited.append(current_state)
-# Generate successors and add to queue
-        successors = generate_successors(current_state)
-        if successors:
-            for successor in successors:
-                # Check if successor has already been visited
-                if successor not in visited:
-                    queue.append((heuristic_compare_halfs(successor), successor))
-    
+        if successors := generate_successors(current_state):
+            queue.extend(
+                (heuristic_compare_halfs(successor), successor)
+                for successor in successors
+                if successor not in visited
+            )
     return "No results found :("
 
 def print5(board):
@@ -119,10 +117,10 @@ def print5(board):
         for i in board:
             if dummy == 5:
                 dummy = 1
-                print(i)
             else:
-                print(i,)
                 dummy+=1
+
+            print(i)
 
 '''
 print( "---- A* ---")
@@ -134,33 +132,33 @@ print()
 def greedy_search(start_state):
     visited = [] # closed
     queue = [(heuristic_compare_halfs(start_state), start_state)] # open
-    
+
     # for statistics 
     start_time: int = perf_counter_ns()
     # ------
-    
+
     while queue:
         h, current_state = queue.pop(0)
         if logic.verifyGameEnd(current_state):
             # for statistics
             end_time: int = perf_counter_ns()
             time: float = (end_time - start_time) / 1000000
-            
+
             print(f"time taken: {time}")
             # -------
             return current_state,len(visited)
-        
+
         if current_state in visited:
             continue
         visited.append(current_state)
-        
-        successors = generate_successors(current_state)
-        if successors:
+
+        if successors := generate_successors(current_state):
             successors.sort(key=lambda x: heuristic_compare_halfs(x))
-            for successor in successors:
-                if successor not in visited:
-                    queue.append((heuristic_compare_halfs(successor), successor))
-        
+            queue.extend(
+                (heuristic_compare_halfs(successor), successor)
+                for successor in successors
+                if successor not in visited
+            )
     return "No results found :("
 
 '''
@@ -172,29 +170,26 @@ print()
 def bfs(start_state):
     visited = []
     queue = [start_state]
-    
+
     # for statistics 
     start_time: int = perf_counter_ns()
     # ------
-    
+
     while queue:
         current_state = queue.pop(0)
         if logic.verifyGameEnd(current_state):
             # for statistics
             end_time: int = perf_counter_ns()
             time: float = (end_time - start_time) / 1000000
-            
+
             print(f"time taken: {time}")
             # -------
             return current_state, len(visited)
         if current_state in visited:
             continue
         visited.append(current_state)
-        successors = generate_successors(current_state)
-        if successors:
-            for successor in successors:
-                if successor not in visited:
-                    queue.append(successor)
+        if successors := generate_successors(current_state):
+            queue.extend(successor for successor in successors if successor not in visited)
     return "No results found :(" 
 
 '''
@@ -212,17 +207,18 @@ def dfs(start_state):
         if logic.verifyGameEnd(current_state):
             end_time: int = perf_counter_ns()
             time: float = (end_time - start_time) / 1000000
-            
+
             print(f"time taken: {time}")
             return current_state, len(visited)
         if current_state in visited:
             continue
         visited.append(current_state)
-        successors = generate_successors(current_state)
-        if successors:
-            for successor in successors[::-1]:
-                if successor not in visited:
-                    stack.append((successor, cost+1))
+        if successors := generate_successors(current_state):
+            stack.extend(
+                (successor, cost + 1)
+                for successor in successors[::-1]
+                if successor not in visited
+            )
     return "No results found :("
 
 '''

@@ -23,8 +23,7 @@ def save_model(model, X_train, X_test, y_train, y_test, fname):
 
 def load_model(fname):
     dirname = 'models'
-    model = joblib.load(os.path.join(dirname, fname))
-    return model
+    return joblib.load(os.path.join(dirname, fname))
 
 def train_model(data, model_obj, fname, test_size=0.2):
     X = data.values

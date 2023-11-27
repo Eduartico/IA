@@ -69,19 +69,14 @@ def start_game():
     option = algorithm_var.get()
     if option == "0 - Human Player":
         draw_board_player()
-        pass
     elif option == "1 - BFS":
         algorithm = alg.bfs
-        pass
     elif option == "2 - DFS":
         algorithm = alg.dfs
-        pass
     elif option == "3 - Greedy":
         algorithm = alg.greedy_search
-        pass
     elif option == "4 - A*":
         algorithm = alg.a_star
-        pass
     draw_board(algorithm)
 
 start_button.config(command=start_game)
